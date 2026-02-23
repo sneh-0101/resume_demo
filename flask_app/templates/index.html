@@ -7,25 +7,24 @@
 <div class="hero-section mb-5">
     <div class="container text-center">
         <h1 class="display-3 fw-bold mb-4">
-            <i class="fas fa-brain"></i> AI-Powered Resume Analysis
+            AI-Powered Resume Analysis. Optimize Your Resume. Get Hired Faster.
         </h1>
-        <p class="lead mb-5 opacity-90 mx-auto" style="max-width: 800px;">
-            Unlock your career potential with SaaS-level insights. Match your resume with job roles
-            using precision NLP and get personalized improvement suggestions in seconds.
+        <p class="lead mb-5 opacity-90 mx-auto" style="max-width: 600px;">
+            Transform your job search with intelligent AI insights. Match your resume with job roles using advanced NLP and receive personalized improvement suggestions instantly.
         </p>
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
             {% if current_user.is_authenticated %}
-            <a href="{{ url_for('analysis.quick_analysis') }}" class="btn btn-light btn-lg px-4 gap-3 me-2">
+            <a href="{{ url_for('analysis.quick_analysis') }}" class="btn btn-green-gradient btn-lg px-4 gap-3 me-2">
                 <i class="fas fa-rocket"></i> Start Analysis Now
             </a>
-            <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-light btn-lg px-4">
+            <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-green btn-lg px-4">
                 <i class="fas fa-chart-line"></i> Go to Dashboard
             </a>
             {% else %}
-            <a href="{{ url_for('analysis.quick_analysis') }}" class="btn btn-light btn-lg px-4 gap-3 me-2">
+            <a href="{{ url_for('analysis.quick_analysis') }}" class="btn btn-green-gradient btn-lg px-4 gap-3 me-2">
                 <i class="fas fa-rocket"></i> Try Free Demo
             </a>
-            <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light btn-lg px-4">
+            <a href="{{ url_for('auth.register') }}" class="btn btn-outline-green btn-lg px-4">
                 <i class="fas fa-user-plus"></i> Sign Up Now
             </a>
             {% endif %}
@@ -35,46 +34,138 @@
 
 <!-- Features Grid -->
 <div class="container mb-5">
-    <h2 class="text-center mb-5">Key Features</h2>
+    <h2 class="section-title">Key Features</h2>
     <div class="row g-4">
         <div class="col-md-4">
-            <div class="card h-100">
-                <div class="card-body p-4 text-center">
-                    <div class="mb-4 d-inline-flex p-3 rounded-circle" style="background: rgba(59, 130, 246, 0.1);">
-                        <i class="fas fa-file-pdf fa-2x" style="color: var(--accent-color);"></i>
-                    </div>
-                    <h5 class="fw-bold mb-3">Smart PDF Parsing</h5>
-                    <p class="text-muted small">
-                        Advanced PDF parsing to extract skills, experience, and education with high accuracy.
-                    </p>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-file-pdf"></i>
                 </div>
+                <h5 class="fw-bold mb-3">Smart PDF Parsing</h5>
+                <p class="text-muted small">
+                    Advanced PDF parsing to extract skills, experience, and education with high accuracy.
+                </p>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card h-100">
-                <div class="card-body p-4 text-center">
-                    <div class="mb-4 d-inline-flex p-3 rounded-circle" style="background: rgba(16, 185, 129, 0.1);">
-                        <i class="fas fa-bullseye fa-2x" style="color: var(--success-color);"></i>
-                    </div>
-                    <h5 class="fw-bold mb-3">Precision Matching</h5>
-                    <p class="text-muted small">
-                        Hybrid matching algorithm using TF-IDF and semantic analysis to score resumes against JDs.
-                    </p>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bullseye"></i>
                 </div>
+                <h5 class="fw-bold mb-3">Precision Matching</h5>
+                <p class="text-muted small">
+                    Hybrid matching algorithm using TF-IDF and semantic analysis to score resumes against JDs.
+                </p>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card h-100">
-                <div class="card-body p-4 text-center">
-                    <div class="mb-4 d-inline-flex p-3 rounded-circle" style="background: rgba(245, 158, 11, 0.1);">
-                        <i class="fas fa-lightbulb fa-2x" style="color: var(--warning-color);"></i>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h5 class="fw-bold mb-3">Actionable Insights</h5>
+                <p class="text-muted small">
+                    Get detailed gap analysis, missing keywords, and interview preparation suggestions.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AI Match Analyzer Demo Section -->
+<div class="demo-section">
+    <div class="container">
+        <h2 class="demo-title">Try Our AI Resume Analyzer Instantly</h2>
+        <div class="demo-container">
+            <div class="row">
+                <!-- Left Column - Input -->
+                <div class="col-lg-6 demo-column demo-column-left">
+                    <!-- Resume Upload -->
+                    <div class="upload-section">
+                        <h3 class="mb-3 fw-bold">1. Upload Resume</h3>
+                        <div class="upload-area" id="uploadArea">
+                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                            <p class="upload-text">Drag and drop file here</p>
+                            <p class="upload-limit">Limit 200MB per file • PDF, DOC, DOCX</p>
+                            <button type="button" class="browse-btn" onclick="document.getElementById('fileInput').click()">
+                                Browse files
+                            </button>
+                            <input type="file" id="fileInput" accept=".pdf,.doc,.docx" style="display: none;">
+                        </div>
+                        
+                        <div class="file-display" id="fileDisplay" style="display: none;">
+                            <div class="file-info">
+                                <i class="fas fa-file-pdf file-icon"></i>
+                                <div>
+                                    <div class="file-name" id="fileName">sneh_popat.pdf</div>
+                                    <div class="file-size" id="fileSize">2.4 MB</div>
+                                </div>
+                            </div>
+                            <button class="remove-file" id="removeFile">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
                     </div>
-                    <h5 class="fw-bold mb-3">Actionable Insights</h5>
-                    <p class="text-muted small">
-                        Get detailed gap analysis, missing keywords, and interview preparation suggestions.
-                    </p>
+
+                    <!-- Job Description -->
+                    <div class="job-description">
+                        <h3 class="mb-3 fw-bold">2. Job Description</h3>
+                        <label for="jobDesc">Paste Job Description here</label>
+                        <textarea id="jobDesc" placeholder="Enter the job description...">python developer</textarea>
+                    </div>
+
+                    <!-- Analyze Button -->
+                    <button class="analyze-btn" id="analyzeBtn">
+                        <i class="fas fa-search"></i> Analyze Resume
+                    </button>
+                </div>
+
+                <!-- Right Column - Results -->
+                <div class="col-lg-6 demo-column">
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        <p class="loading-text">Analyzing your resume...</p>
+                    </div>
+                    
+                    <div class="results-section" id="resultsSection" style="display: none;">
+                        <h3 class="mb-4 fw-bold">Analysis Results</h3>
+                        
+                        <!-- Match Score -->
+                        <div class="match-score-container">
+                            <div class="match-score-label">Match Score</div>
+                            <div class="match-score" id="matchScore">9.41%</div>
+                            <div class="match-score-message">Low match - needs improvement</div>
+                        </div>
+
+                        <!-- Matched Skills -->
+                        <div class="skills-section">
+                            <div class="skills-title">
+                                Matched Skills
+                                <span class="skills-count" id="matchedCount">1</span>
+                            </div>
+                            <div class="skill-tags" id="matchedSkills">
+                                <span class="skill-tag">python</span>
+                            </div>
+                        </div>
+
+                        <!-- Missing Skills -->
+                        <div class="skills-section">
+                            <div class="skills-title">
+                                Missing Skills
+                                <span class="skills-count" id="missingCount">0</span>
+                            </div>
+                            <div class="skill-tags" id="missingSkills">
+                                <!-- Skills will be added dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Message Box -->
+                        <div class="message-box" id="messageBox">
+                            You have all the required skills defined in our database!
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -82,68 +173,56 @@
 </div>
 
 <!-- How It Works -->
-<div class="bg-light py-5 mb-5">
+<div class="bg-success-light py-5 mb-5">
     <div class="container">
-        <h2 class="text-center mb-5">How It Works</h2>
+        <h2 class="section-title">How It Works</h2>
         <div class="row g-4">
             <div class="col-md-3 text-center">
-                <div class="mb-3">
-                    <div class="rounded-circle bg-primary text-white d-inline-flex justify-content-center align-items-center"
-                        style="width: 60px; height: 60px; font-size: 28px;">
-                        1
-                    </div>
+                <div class="step-indicator">
+                    1
                 </div>
-                <h5>Upload Resume</h5>
-                <p>Upload your PDF resume in seconds</p>
+                <h5 class="fw-bold">Upload Resume</h5>
+                <p class="text-muted">Upload your PDF resume in seconds</p>
             </div>
 
             <div class="col-md-3 text-center">
-                <div class="mb-3">
-                    <div class="rounded-circle bg-primary text-white d-inline-flex justify-content-center align-items-center"
-                        style="width: 60px; height: 60px; font-size: 28px;">
-                        2
-                    </div>
+                <div class="step-indicator">
+                    2
                 </div>
-                <h5>Paste Job Description</h5>
-                <p>Provide the job posting text</p>
+                <h5 class="fw-bold">Paste Job Description</h5>
+                <p class="text-muted">Provide the job posting text</p>
             </div>
 
             <div class="col-md-3 text-center">
-                <div class="mb-3">
-                    <div class="rounded-circle bg-primary text-white d-inline-flex justify-content-center align-items-center"
-                        style="width: 60px; height: 60px; font-size: 28px;">
-                        3
-                    </div>
+                <div class="step-indicator">
+                    3
                 </div>
-                <h5>AI Analysis</h5>
-                <p>Our AI analyzes the match instantly</p>
+                <h5 class="fw-bold">AI Analysis</h5>
+                <p class="text-muted">Our AI analyzes the match instantly</p>
             </div>
 
             <div class="col-md-3 text-center">
-                <div class="mb-3">
-                    <div class="rounded-circle bg-primary text-white d-inline-flex justify-content-center align-items-center"
-                        style="width: 60px; height: 60px; font-size: 28px;">
-                        4
-                    </div>
+                <div class="step-indicator">
+                    4
                 </div>
-                <h5>Get Results</h5>
-                <p>Review detailed analysis & suggestions</p>
+                <h5 class="fw-bold">Get Results</h5>
+                <p class="text-muted">Review detailed analysis & suggestions</p>
             </div>
         </div>
     </div>
 </div>
 
 <!-- CTA Section -->
-<div class="bg-primary text-white py-5 rounded-4 shadow-lg overflow-hidden position-relative">
-    <div class="container text-center position-relative" style="z-index: 2;">
+<div class="cta-section mb-5">
+    <div class="container text-center">
         <h2 class="fw-bold mb-4">Ready to Optimize Your Job Search?</h2>
-        <p class="lead mb-4 opacity-75">Get started with your first resume analysis today</p>
+        <p class="lead mb-4 opacity-90">Get started with your first resume analysis today</p>
         {% if not current_user.is_authenticated %}
-        <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg px-5">
+        <a href="{{ url_for('auth.register') }}" class="btn btn-lg px-5">
             Create Free Account
         </a>
         {% else %}
-        <a href="{{ url_for('analysis.upload_resume') }}" class="btn btn-light btn-lg px-5">
+        <a href="{{ url_for('analysis.upload_resume') }}" class="btn btn-lg px-5">
             Upload Your Resume
         </a>
         {% endif %}

@@ -27,7 +27,7 @@
 
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold" href="{{ url_for('main.index') }}">
                 <i class="fas fa-brain"></i> AI Resume Analyzer
@@ -56,7 +56,7 @@
                     </li>
                     {% if current_user.is_admin %}
                     <li class="nav-item">
-                        <a class="nav-link fw-bold text-warning" href="{{ url_for('admin.dashboard') }}">Admin Panel</a>
+                        <a class="nav-link fw-bold text-success" href="{{ url_for('admin.dashboard') }}">Admin Panel</a>
                     </li>
                     {% else %}
                     {# Regular User Navigation (non-admin) #}
@@ -67,7 +67,7 @@
                         <a class="nav-link" href="{{ url_for('analysis.resume_list') }}">My Resumes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-bold text-info" href="{{ url_for('resume.builder') }}">
+                        <a class="nav-link fw-bold text-success" href="{{ url_for('resume.builder') }}">
                             <i class="fas fa-magic"></i> Resume Builder
                         </a>
                     </li>
@@ -129,12 +129,12 @@
     </main>
 
     <!-- Footer -->
-    <footer class="text-white text-center">
+    <footer>
         <div class="container">
             <div class="row mb-4">
                 <div class="col-md-12">
                     <h5 class="fw-bold mb-3">AI Resume Analyzer</h5>
-                    <p class="text-light opacity-75">Optimized by AI • Powering your career growth</p>
+                    <p class="opacity-75">Optimized by AI • Powering your career growth</p>
                 </div>
             </div>
             <hr class="opacity-25 mb-4">
@@ -147,6 +147,7 @@
 
     <!-- Custom JS -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/demo.js') }}"></script>
 
     {% block extra_js %}{% endblock %}
 </body>
