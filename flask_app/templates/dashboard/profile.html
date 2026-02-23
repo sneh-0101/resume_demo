@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - AI Resume Analyzer{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-user-cog"></i> User Profile</h4>
+                </div>
+                <div class="card-body p-5">
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="rounded-circle bg-primary text-white d-inline-flex justify-content-center align-items-center" style="width: 100px; height: 100px; font-size: 40px;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <h3>{{ current_user.first_name }} {{ current_user.last_name }}</h3>
+                            <p class="text-muted mb-1">
+                                <i class="fas fa-user"></i> <strong>Username:</strong> {{ current_user.username }}
+                            </p>
+                            <p class="text-muted mb-1">
+                                <i class="fas fa-envelope"></i> <strong>Email:</strong> {{ current_user.email }}
+                            </p>
+                            <p class="text-muted">
+                                <i class="fas fa-calendar"></i> <strong>Member Since:</strong> {{ current_user.created_at.strftime('%B %d, %Y') }}
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Account Settings:</strong> Profile editing and additional settings coming soon!
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

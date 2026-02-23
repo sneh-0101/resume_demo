@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}About - AI Resume Analyzer{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="text-center mb-4">About AI Resume Analyzer</h1>
+            
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Our Mission</h5>
+                    <p class="card-text">
+                        We believe job seekers deserve intelligent tools to optimize their applications. 
+                        AI Resume Analyzer helps you understand how your resume matches job requirements, 
+                        identify gaps, and get actionable recommendations for improvement.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">Technology</h5>
+                    <p class="card-text">
+                        Our platform uses advanced Natural Language Processing (NLP) and Machine Learning to:
+                    </p>
+                    <ul>
+                        <li><strong>Extract Resume Data:</strong> Intelligent PDF parsing to identify your skills, experience, and education</li>
+                        <li><strong>Analyze Job Requirements:</strong> NLP processing to extract key skills and qualifications</li>
+                        <li><strong>Calculate Match Scores:</strong> Hybrid algorithm using TF-IDF and skill-based matching</li>
+                        <li><strong>Generate Insights:</strong> AI-powered suggestions for resume optimization</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">How It Works</h5>
+                    <ol>
+                        <li><strong>Upload Your Resume:</strong> Upload your PDF resume securely</li>
+                        <li><strong>Paste Job Description:</strong> Provide the job posting you're interested in</li>
+                        <li><strong>Get Analysis:</strong> Receive instant AI-powered analysis</li>
+                        <li><strong>Review Results:</strong> See your match score and improvement suggestions</li>
+                        <li><strong>Download Report:</strong> Get a professional PDF report</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">Privacy & Security</h5>
+                    <p class="card-text">
+                        Your data is important to us. We use industry-standard encryption and security practices:
+                    </p>
+                    <ul>
+                        <li>✅ All data is encrypted in transit and at rest</li>
+                        <li>✅ Password hashing with strong algorithms</li>
+                        <li>✅ No data sharing with third parties</li>
+                        <li>✅ Only you can access your resumes and analyses</li>
+                        <li>✅ GDPR compliant data handling</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

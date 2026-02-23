@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+
+{% block title %}Resume Builder - AI Resume Analyzer{% endblock %}
+
+{% block content %}
+<!-- Macros/Templates for dynamic entries -->
+{% macro render_education_entry(edu_form, index) %}
+<div class="education-entry card mb-3 border-0 shadow-sm" data-index="{{ index }}">
+    <div class="card-body p-3">
+        <div class="text-end mb-2">
+            <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeEntry(this)">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label small fw-bold">School*</label>
+                {{ edu_form.school(class="form-control", placeholder="Ex: Boston University") }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label small fw-bold">Degree</label>
+                {{ edu_form.degree(class="form-control", placeholder="Ex: Bachelor of Science") }}
+            </div>
+            <div class="col-md-12">
+                <label class="form-label small fw-bold">Field of study</label>
+                {{ edu_form.field_of_study(class="form-control", placeholder="Ex: Business") }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label small fw-bold text-muted">Start Date</label>
+                <div class="row g-2">
+                    <div class="col-6">{{ edu_form.start_month(class="form-select") }}</div>
+                    <div class="col-6">{{ edu_form.start_year(class="form-control", placeholder="Year") }}</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label small fw-bold text-muted">End Date (or expected)</label>
+                <div class="row g-2">
+                    <div class="col-6">{{ edu_form.end_month(class="form-select") }}</div>
+                    <div class="col-6">{{ edu_form.end_year(class="form-control", placeholder="Year") }}</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Grade</label>
+                {{ edu_form.grade(class="form-control", placeholder="e.g. 3.8/4.0") }}
+            </div>
+            <div class="col-md-8">
+                <label class="form-label small fw-bold">Activities and societies</label>
+                {{ edu_form.activities(class="form-control", rows="2", placeholder="Ex: Alpha Phi Omega, Marching
+                Band...") }}
+            </div>
+            <div class="col-md-12">
+                <label class="form-label small fw-bold">Description</label>
+                {{ edu_form.details(class="form-control", rows="3") }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro render_experience_entry(exp_form, index) %}
+<div class="experience-entry card mb-3 border-0 shadow-sm" data-index="{{ index }}">
+    <div class="card-body p-3">
+        <div class="text-end mb-2">
+            <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeEntry(this)">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label small fw-bold">Role / Position*</label>
+                {{ exp_form.role(class="form-control", placeholder="Ex: Software Engineer") }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label small fw-bold">Company*</label>
+                {{ exp_form.company(class="form-control", placeholder="Ex: Google") }}
+            </div>
+            <div class="col-md-12">
+                <label class="form-label small fw-bold text-muted">Start Date</label>
+                <div class="row g-2">
+                    <div class="col-3">{{ exp_form.start_month(class="form-select") }}</div>
+                    <div class="col-3">{{ exp_form.start_year(class="form-control", placeholder="Year") }}</div>
+                    <div class="col-6">
+                        <label class="form-label small fw-bold text-muted d-block">&nbsp;</label>
+                        {{ exp_form.location(class="form-control", placeholder="Location (Ex: Remote)") }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label small fw-bold text-muted">End Date</label>
+                <div class="row g-2">
+                    <div class="col-6">{{ exp_form.end_month(class="form-select") }}</div>
+                    <div class="col-6">{{ exp_form.end_year(class="form-control", placeholder="Year") }}</div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <label class="form-label small fw-bold">Description</label>
+                {{ exp_form.details(class="form-control", rows="4") }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white py-3">
+                <h3 class="mb-0"><i class="fas fa-file-invoice"></i> Resume Builder</h3>
+                <p class="mb-0 small">Fill in your details once, generate many resumes.</p>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+
+                    <!-- Section 1: Personal Info -->
+                    <div class="resume-section mb-4">
+                        <h5 class="text-primary border-bottom pb-2 mb-3"><i class="fas fa-user-circle"></i> Personal
+                            Information</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                {{ form.full_name.label(class="form-label fw-bold") }}
+                                {{ form.full_name(class="form-control", placeholder="John Doe") }}
+                                {% for error in form.full_name.errors %}<span class="text-danger small">{{ error
+                                    }}</span>{% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.email.label(class="form-label fw-bold") }}
+                                {{ form.email(class="form-control", placeholder="john@example.com") }}
+                                {% for error in form.email.errors %}<span class="text-danger small">{{ error }}</span>{%
+                                endfor %}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.phone.label(class="form-label fw-bold") }}
+                                {{ form.phone(class="form-control", placeholder="+1 234 567 890") }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.linkedin.label(class="form-label fw-bold") }}
+                                {{ form.linkedin(class="form-control", placeholder="linkedin.com/in/username") }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.github.label(class="form-label fw-bold") }}
+                                {{ form.github(class="form-control", placeholder="github.com/username") }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Objective -->
+                    <div class="resume-section mb-4">
+                        <h5 class="text-primary border-bottom pb-2 mb-3"><i class="fas fa-bullseye"></i> Career
+                            Objective</h5>
+                        {{ form.career_objective(class="form-control", rows="3", placeholder="Explain your professional
+                        goals and what you bring to the table...") }}
+                    </div>
+
+                    <!-- Section 3: Education -->
+                    <div class="resume-section mb-4">
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                            <h5 class="text-primary m-0"><i class="fas fa-graduation-cap"></i> Education</h5>
+                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                onclick="addEntry('education')">
+                                <i class="fas fa-plus"></i> Add Education
+                            </button>
+                        </div>
+                        <div id="education-container">
+                            {% for edu_form in form.education_list %}
+                            {{ render_education_entry(edu_form, loop.index0) }}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Experience -->
+                    <div class="resume-section mb-4">
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                            <h5 class="text-primary m-0"><i class="fas fa-briefcase"></i> Work Experience</h5>
+                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                onclick="addEntry('experience')">
+                                <i class="fas fa-plus"></i> Add Experience
+                            </button>
+                        </div>
+                        <div id="experience-container">
+                            {% for exp_form in form.experience_list %}
+                            {{ render_experience_entry(exp_form, loop.index0) }}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Section 5: Projects -->
+                    <div class="resume-section mb-4">
+                        <h5 class="text-primary border-bottom pb-2 mb-3"><i class="fas fa-project-diagram"></i> Projects
+                        </h5>
+                        <div class="alert alert-light border small py-2 fw-medium">
+                            <i class="fas fa-info-circle"></i> <strong>Format:</strong> Title \n Link \n Description
+                            (Separate with double newlines)
+                        </div>
+                        {{ form.projects(class="form-control", rows="5", placeholder="Project Title\nLink\nDescription")
+                        }}
+                    </div>
+
+                    <!-- Section 6: Others -->
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="resume-section h-100">
+                                <h5 class="text-primary border-bottom pb-2 mb-3"><i class="fas fa-tools"></i> Skills
+                                </h5>
+                                {{ form.skills(class="form-control", placeholder="Python, Java, React...") }}
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="resume-section h-100">
+                                <h5 class="text-primary border-bottom pb-2 mb-3"><i class="fas fa-certificate"></i>
+                                    Certifications</h5>
+                                {{ form.certifications(class="form-control", placeholder="AWS Cloud, Oracle Java...") }}
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="resume-section h-100">
+                                <h5 class="text-primary border-bottom pb-2 mb-3"><i class="fas fa-trophy"></i>
+                                    Achievements</h5>
+                                {{ form.achievements(class="form-control", placeholder="1st Rank in Hackathon...") }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        {{ form.submit(class="btn btn-primary btn-lg px-5 shadow", id="generate-btn") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Templates for JS -->
+<template id="education-template">
+    {{ render_education_entry(form.education_list.append_entry(), 'INDEX') }}
+</template>
+
+<template id="experience-template">
+    {{ render_experience_entry(form.experience_list.append_entry(), 'INDEX') }}
+</template>
+
+<script>
+    function addEntry(type) {
+        const container = document.getElementById(`${type}-container`);
+        const template = document.getElementById(`${type}-template`).innerHTML;
+        const index = container.children.length;
+
+        // Replace all instances of "-N-" in names and IDs with the new index
+        // WTForms renders names like education_list-0-school
+        const rendered = template.replace(/-[0-9]+-/g, `-${index}-`).replace(/_[0-9]+_/g, `_${index}_`);
+
+        const div = document.createElement('div');
+        div.innerHTML = rendered;
+        container.appendChild(div.firstElementChild);
+    }
+
+    function removeEntry(btn) {
+        btn.closest('.card').remove();
+        // Optional: Renumber indices if needed for strict FieldList processing, 
+        // though most frameworks handle gaps or we can fix them on submit
+    }
+</script>
+
+<style>
+    /* ... add some specific styles for granular forms ... */
+    .form-select {
+        background-color: #0f172a !important;
+        color: #ffffff !important;
+        border-color: #334155 !important;
+    }
+
+    .card {
+        background-color: #263349 !important;
+        color: #f1f5f9;
+    }
+</style>
+{% endblock %}

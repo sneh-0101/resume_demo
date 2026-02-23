@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}HR Dashboard - AI Resume Analyzer{% endblock %}
+{% block content %}
+<div class="container-fluid py-4">
+    <h1 class="h3 mb-4"><i class="fas fa-briefcase"></i> HR Dashboard</h1>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5>Jobs Posted</h5>
+                    <h2>{{ jobs_count }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5>Total Resumes</h5>
+                    <h2>{{ total_resumes }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5>Active Users</h5>
+                    <h2>{{ total_users }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body text-center">
+            <h4>Quick Actions</h4>
+            <a href="{{ url_for('hr.add_job') }}" class="btn btn-lg btn-primary m-2"><i class="fas fa-plus"></i> Post
+                New Job</a>
+            <a href="{{ url_for('hr.jobs') }}" class="btn btn-lg btn-secondary m-2"><i class="fas fa-list"></i> View My
+                Jobs</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

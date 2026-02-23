@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Resume - AI Resume Analyzer{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card overflow-hidden">
+                <div class="card-header py-3">
+                    <h5 class="mb-0 fw-bold"><i class="fas fa-cloud-upload-alt text-primary"></i> Upload Resume</h5>
+                </div>
+                <div class="card-body p-5">
+                    <form method="POST" enctype="multipart/form-data" novalidate>
+                        {{ form.hidden_tag() }}
+
+                        <div class="mb-4">
+                            <label for="resume_file" class="form-label fw-bold">Select PDF Resume</label>
+                            {% if form.resume_file.errors %}
+                            {{ form.resume_file(class="form-control is-invalid", id="resume_file") }}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.resume_file.errors %}
+                                <i class="fas fa-times-circle"></i> {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.resume_file(class="form-control", id="resume_file") }}
+                            {% endif %}
+                            <small class="text-muted d-block mt-2">
+                                <i class="fas fa-info-circle"></i> PDF format only • Maximum 16MB
+                            </small>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-primary btn-lg", value="Upload Resume") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="alert alert-info mt-4">
+                <i class="fas fa-shield-alt"></i> <strong>Privacy First:</strong>
+                Your resume is processed securely and stored only in your account for future analyses.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

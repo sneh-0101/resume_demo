@@ -1,0 +1,186 @@
+/* Base Template Styles (for all templates) */
+.resume-container,
+.t2-resume {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    margin: 20px auto;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: #333;
+    line-height: 1.5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.t2-resume {
+    padding: 15mm;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Template 1: Professional Nova */
+.t1-header {
+    margin-bottom: 30px;
+    border-bottom: 3px solid #4F46E5;
+    padding-bottom: 20px;
+}
+
+.t1-name {
+    font-size: 32px;
+    font-weight: bold;
+    color: #4F46E5;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.t1-contact {
+    font-size: 14px;
+    color: #666;
+}
+
+.t1-section-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #4F46E5;
+    text-transform: uppercase;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    border-left: 5px solid #4F46E5;
+    padding-left: 10px;
+}
+
+.t1-item-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.t1-item-sub {
+    font-style: italic;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.t1-skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.t1-skill-tag {
+    background: #f0f1ff;
+    color: #4F46E5;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Template 2: ATS Friendly / Minimalist */
+.t2-container {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #000;
+}
+
+.t2-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.t2-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.t2-section-title {
+    font-size: 14px;
+    font-weight: bold;
+    border-bottom: 1px solid #000;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.t2-item-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+}
+
+.t2-desc {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    text-align: justify;
+}
+
+/* Media Queries */
+
+@media (prefers-color-scheme: dark) {
+    .resume-section {
+        background: #1e293b;
+        color: #f1f5f9;
+        border: 1px solid #334155;
+    }
+
+    .form-control {
+        background-color: #0f172a !important;
+        color: #ffffff !important;
+        border-color: #334155 !important;
+        padding: 10px 15px;
+        font-size: 1rem;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color) !important;
+        background-color: #020617 !important;
+    }
+
+    .form-control::placeholder {
+        color: #94a3b8;
+        opacity: 0.6;
+    }
+
+    .form-label {
+        color: #e2e8f0 !important;
+    }
+
+    .alert-light {
+        background-color: #334155;
+        border-color: #475569;
+        color: #cbd5e1;
+    }
+}
+
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+        background: #fff !important;
+    }
+
+    .resume-container,
+    .t2-resume {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        min-height: auto !important;
+        border: none !important;
+    }
+
+    header,
+    section,
+    .t2-section,
+    .mb-3,
+    .t2-item,
+    .row {
+        page-break-inside: avoid;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+}

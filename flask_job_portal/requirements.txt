@@ -1,0 +1,28 @@
+# Flask Job Portal - Requirements
+# Install with: pip install -r requirements.txt
+
+# Core Flask
+Flask==3.0.0
+Flask-SQLAlchemy==3.1.1
+Flask-Login==0.6.3
+Flask-WTF==1.2.1
+WTForms==3.1.1
+
+# Database
+SQLAlchemy==2.0.23
+
+# PDF Processing
+pdfplumber==0.10.3
+reportlab==4.0.7
+
+# AI/ML
+scikit-learn==1.3.2
+numpy==1.26.4
+
+# Web & Utilities
+Werkzeug==3.0.1
+click==8.1.7
+
+# Development & Production
+python-dotenv==1.0.0
+Gunicorn==21.2.0

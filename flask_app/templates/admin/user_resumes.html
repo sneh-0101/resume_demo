@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.username }}'s Resumes - Admin Dashboard{% endblock %}
+
+{% block content %}
+<!-- Template updated to fix BuildError -->
+<div class="container-fluid py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('admin.dashboard') }}" class="text-decoration-none">Admin Dashboard</a></li>
+            <li class="breadcrumb-item active">{{ user.username }}'s Resumes</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <div>
+            <h1 class="h2">{{ user.username }}'s Resumes</h1>
+            <p class="text-muted mb-0">
+                <i class="fas fa-envelope"></i> {{ user.email }} | 
+                <i class="fas fa-calendar"></i> Joined: {{ user.created_at.strftime('%B %d, %Y') }}
+            </p>
+        </div>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-4 col-md-6">
+            <div class="card bg-primary text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="me-3">
+                            <div class="text-white-75 small">Total Resumes</div>
+                            <div class="display-4 fw-bold">{{ resumes|length }}</div>
+                        </div>
+                        <i class="fas fa-file-pdf fa-3x text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-md-6">
+            <div class="card bg-success text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="me-3">
+                            <div class="text-white-75 small">Total Analyses</div>
+                            <div class="display-4 fw-bold">{{ user.analyses|length }}</div>
+                        </div>
+                        <i class="fas fa-chart-line fa-3x text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-md-6">
+            <div class="card bg-info text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="me-3">
+                            <div class="text-white-75 small">User Role</div>
+                            <div class="display-6 fw-bold">
+                                {% if user.is_admin %}
+                                Admin
+                                {% else %}
+                                User
+                                {% endif %}
+                            </div>
+                        </div>
+                        <i class="fas fa-user fa-3x text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resumes Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Uploaded Resumes</h6>
+            <span class="badge bg-secondary">{{ resumes|length }} files</span>
+        </div>
+        <div class="card-body">
+            {% if resumes %}
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>File Name</th>
+                            <th>Uploaded Date</th>
+                            <th>File Size</th>
+                            <th>Skills Extracted</th>
+                            <th>Analyses</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for resume in resumes %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-file-pdf text-danger me-2"></i>
+                                    <div>
+                                        <strong>{{ resume.filename }}</strong>
+                                        <br>
+                                        <small class="text-muted">{{ resume.filepath.split('\\')[-1] }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <i class="fas fa-calendar text-muted"></i>
+                                {{ resume.created_at.strftime('%Y-%m-%d %H:%M') }}
+                            </td>
+                            <td>
+                                {% if resume.filepath %}
+                                <span class="text-muted">PDF File</span>
+                                {% else %}
+                                <span class="text-muted">Unknown</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if resume.extracted_skills %}
+                                <div class="d-flex flex-wrap gap-1">
+                                    {% for skill in resume.extracted_skills[:5] %}
+                                    <span class="badge bg-info text-dark">{{ skill }}</span>
+                                    {% endfor %}
+                                    {% if resume.extracted_skills|length > 5 %}
+                                    <span class="badge bg-secondary">+{{ resume.extracted_skills|length - 5 }} more</span>
+                                    {% endif %}
+                                </div>
+                                {% else %}
+                                <span class="text-muted">No skills extracted</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-success">{{ resume.analyses|length }}</span>
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ url_for('admin.download_resume', resume_id=resume.id) }}" 
+                                       class="btn btn-sm btn-primary" 
+                                       title="Download Resume">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                    {% if resume.analyses %}
+                                    <a href="{{ url_for('analysis.view_analysis', analysis_id=resume.analyses[-1].id) }}" 
+                                       class="btn btn-sm btn-info" 
+                                       title="View Latest Analysis">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-file-upload fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">No Resumes Found</h5>
+                <p class="text-muted">{{ user.username }} hasn't uploaded any resumes yet.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    {% if user.analyses %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Recent Analysis Activity</h6>
+        </div>
+        <div class="card-body">
+            <div class="timeline">
+                {% for analysis in user.analyses[:5] %}
+                <div class="timeline-item mb-3">
+                    <div class="timeline-marker bg-primary"></div>
+                    <div class="timeline-content">
+                        <h6 class="mb-1">Resume Analysis</h6>
+                        <p class="mb-1">
+                            <strong>Match Score:</strong> 
+                            <span class="badge bg-{{ 'success' if analysis.match_score >= 70 else 'warning' if analysis.match_score >= 50 else 'danger' }}">
+                                {{ "%.1f"|format(analysis.match_score) }}%
+                            </span>
+                        </p>
+                        <small class="text-muted">
+                            <i class="fas fa-clock"></i> {{ analysis.created_at.strftime('%Y-%m-%d %H:%M') }}
+                        </small>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #dee2e6;
+}
+
+.timeline-item {
+    position: relative;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -23px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
+
+.timeline-content {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 3px solid #0d6efd;
+}
+</style>
+{% endblock %}

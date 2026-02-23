@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Quick Analysis - AI Resume Analyzer{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-magic"></i> Quick Resume Analysis
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <p class="text-muted mb-4">
+                        Upload your resume and paste a job description to get instant AI-powered analysis.
+                        No account needed!
+                    </p>
+                    
+                    <form method="POST" enctype="multipart/form-data" novalidate>
+                        {{ form.hidden_tag() }}
+                        
+                        <!-- Resume Upload -->
+                        <div class="mb-4">
+                            <h5 class="card-subtitle mb-3">
+                                <i class="fas fa-file-pdf text-danger"></i> Step 1: Upload Your Resume
+                            </h5>
+                            {% if form.resume_file.errors %}
+                                {{ form.resume_file(class="form-control is-invalid") }}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.resume_file.errors %}
+                                        <i class="fas fa-times-circle"></i> {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="input-group">
+                                    {{ form.resume_file(class="form-control") }}
+                                    <span class="input-group-text">PDF Only</span>
+                                </div>
+                                <small class="text-muted d-block mt-2">
+                                    <i class="fas fa-info-circle"></i> Maximum file size: 16MB
+                                </small>
+                            {% endif %}
+                        </div>
+                        
+                        <hr>
+                        
+                        <!-- Job Description -->
+                        <div class="mb-4">
+                            <h5 class="card-subtitle mb-3">
+                                <i class="fas fa-briefcase text-primary"></i> Step 2: Paste Job Description
+                            </h5>
+                            {% if form.job_description.errors %}
+                                {{ form.job_description(class="form-control is-invalid", rows=6) }}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.job_description.errors %}
+                                        <i class="fas fa-times-circle"></i> {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.job_description(class="form-control", rows=8, placeholder="Paste the job description here...") }}
+                                <small class="text-muted d-block mt-2">
+                                    Include job requirements, responsibilities, and desired skills
+                                </small>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-primary btn-lg", value="Analyze Now") }}
+                        </div>
+                    </form>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="alert alert-info mb-0">
+                        <i class="fas fa-lightbulb"></i> <strong>Tip:</strong>
+                        For better results, paste the complete job description including skills, requirements, and qualifications.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Info Cards -->
+            <div class="row mt-5 g-4">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-shield-alt fa-2x text-success mb-3"></i>
+                            <h5 class="card-title">100% Private</h5>
+                            <p class="card-text text-muted small">
+                                Your resume and data are never stored or shared
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-bolt fa-2x text-warning mb-3"></i>
+                            <h5 class="card-title">Instant Results</h5>
+                            <p class="card-text text-muted small">
+                                Get analysis results in seconds
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

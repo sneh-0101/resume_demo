@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - AI Resume Analyzer{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h3">
+                <i class="fas fa-chart-line"></i> Welcome back, {{ current_user.first_name or current_user.username }}!
+            </h1>
+            <p class="text-muted">Here's your resume analysis dashboard</p>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4 g-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <p class="text-muted mb-2">Resumes Uploaded</p>
+                            <h3 class="mb-0">{{ resume_count }}</h3>
+                        </div>
+                        <div class="text-primary" style="font-size: 2rem;">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white">
+                    <a href="{{ url_for('analysis.resume_list') }}" class="btn btn-sm btn-link text-decoration-none">
+                        View all <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <p class="text-muted mb-2">Analyses Performed</p>
+                            <h3 class="mb-0">{{ analysis_count }}</h3>
+                        </div>
+                        <div class="text-success" style="font-size: 2rem;">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white">
+                    <a href="{{ url_for('analysis.history') }}" class="btn btn-sm btn-link text-decoration-none">
+                        View history <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <p class="text-muted mb-2">Average Score</p>
+                            <h3 class="mb-0">
+                                {% if avg_score > 0 %}
+                                    <span class="{% if avg_score >= 75 %}text-success{% elif avg_score >= 50 %}text-warning{% else %}text-danger{% endif %}">
+                                        {{ avg_score }}%
+                                    </span>
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </h3>
+                        </div>
+                        <div class="text-warning" style="font-size: 2rem;">
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <p class="text-muted mb-2">Quick Action</p>
+                            <a href="{{ url_for('analysis.upload_resume') }}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-cloud-upload-alt"></i> Upload
+                            </a>
+                        </div>
+                        <div class="text-info" style="font-size: 2rem;">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Analyses -->
+    {% if recent_analyses %}
+        <div class="row">
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-clock"></i> Recent Analyses
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Resume</th>
+                                        <th>Score</th>
+                                        <th>Matched</th>
+                                        <th>Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for analysis in recent_analyses %}
+                                        <tr>
+                                            <td>
+                                                <i class="fas fa-file-pdf text-danger"></i>
+                                                {{ analysis.resume.filename[:25] }}{% if analysis.resume.filename|length > 25 %}...{% endif %}
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-{% if analysis.match_score >= 75 %}success{% elif analysis.match_score >= 50 %}warning{% else %}danger{% endif %}">
+                                                    {{ analysis.match_score }}%
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <small>{{ analysis.matched_skills|length }} skills</small>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ analysis.created_at.strftime('%b %d') }}</small>
+                                            </td>
+                                            <td>
+                                                <a href="{{ url_for('analysis.view_analysis', analysis_id=analysis.id) }}" class="btn btn-sm btn-outline-primary">
+                                                    View
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <a href="{{ url_for('analysis.history') }}" class="btn btn-sm btn-link">View all history</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

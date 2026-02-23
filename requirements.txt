@@ -1,0 +1,8 @@
+streamlit
+pdfplumber
+spacy
+scikit-learn
+nltk
+reportlab
+plotly
+streamlit-option-menu

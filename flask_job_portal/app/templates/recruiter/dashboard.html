@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Recruiter Dashboard{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Stats -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-briefcase text-primary"></i></h5>
+                    <h3>{{ total_jobs }}</h3>
+                    <p>Active Jobs</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-users text-info"></i></h5>
+                    <h3>{{ total_applications }}</h3>
+                    <p>Total Applications</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-hourglass-half text-warning"></i></h5>
+                    <h3>{{ pending_applications }}</h3>
+                    <p>Pending Review</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-star text-success"></i></h5>
+                    <h3>0</h3>
+                    <p>Hired</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Jobs Section -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-briefcase"></i> Your Job Postings</h5>
+                    <a href="{{ url_for('recruiter.create_job') }}" class="btn btn-sm btn-light">
+                        <i class="fas fa-plus"></i> Post Job
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if jobs %}
+                        <div class="list-group">
+                            {% for job in jobs %}
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-0">{{ job.title }}</h6>
+                                    <small class="text-muted">
+                                        <i class="fas fa-users"></i> {{ job.applications|length }} applications
+                                    </small>
+                                </div>
+                                <div>
+                                    <a href="{{ url_for('recruiter.edit_job', job_id=job.id) }}" class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form method="POST" action="{{ url_for('recruiter.delete_job', job_id=job.id) }}" style="display: inline;" onclick="return confirm('Delete this job?');">
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No jobs posted yet. <a href="{{ url_for('recruiter.create_job') }}">Post a job</a> to get started!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Applications -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-inbox"></i> Recent Applications</h5>
+                    <a href="{{ url_for('recruiter.manage_applications') }}" class="btn btn-sm btn-light">Manage</a>
+                </div>
+                <div class="card-body">
+                    {% if recent_apps %}
+                        <div class="list-group">
+                            {% for app in recent_apps[:5] %}
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="mb-1">{{ app.user.get_full_name() }}</h6>
+                                        <small class="text-muted">{{ app.job.title }} • {{ app.applied_at.strftime('%b %d') }}</small>
+                                    </div>
+                                    <span class="badge bg-{{ 'success' if app.match_score >= 80 else 'warning' if app.match_score >= 60 else 'danger' }}">
+                                        {% if app.match_score %}{{ app.match_score }}%{% else %}N/A{% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No applications yet</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h4 class="mb-3">Quick Actions</h4>
+            <div class="btn-group" role="group">
+                <a href="{{ url_for('recruiter.create_job') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-plus"></i> Post New Job
+                </a>
+                <a href="{{ url_for('recruiter.manage_applications') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-inbox"></i> Manage Applications
+                </a>
+                <a href="{{ url_for('recruiter.dashboard') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-refresh"></i> Refresh
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

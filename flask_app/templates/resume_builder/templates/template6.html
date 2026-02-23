@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ data.full_name }} - Resume</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #eeeff1;
+            color: #111;
+            margin: 0;
+            padding: 0;
+        }
+
+        .resume-wrapper {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            margin: 30px auto;
+            padding: 40px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            border-bottom: 3px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .name {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .contact-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            margin-top: 5px;
+            color: #444;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section-header {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            background: #f0f0f0;
+            padding: 4px 10px;
+            border-left: 5px solid #000;
+            margin-bottom: 12px;
+        }
+
+        .item {
+            margin-bottom: 15px;
+        }
+
+        .item-head {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .item-subhead {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 13px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .item-dates {
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 400;
+            font-size: 12px;
+        }
+
+        .item-desc {
+            font-size: 12.5px;
+            line-height: 1.4;
+            color: #222;
+            margin-top: 5px;
+            text-align: justify;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 5px;
+        }
+
+        .skill-node {
+            font-size: 12px;
+            font-family: 'Roboto Mono', monospace;
+            display: flex;
+            align-items: center;
+        }
+
+        .skill-node::before {
+            content: ">";
+            margin-right: 5px;
+            font-weight: 700;
+        }
+
+        @media print {
+            body {
+                background: none;
+            }
+
+            .resume-wrapper {
+                margin: 0;
+                box-shadow: none;
+                width: 100%;
+                padding: 30px;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="no-print container mt-4 text-center">
+        <button onclick="downloadPDF()" class="btn btn-dark btn-sm"><i class="fas fa-terminal me-2"></i>
+            EXPORT_RESUME.PDF</button>
+        <a href="{{ url_for('resume.templates') }}" class="btn btn-outline-secondary btn-sm">RETURN_TO_SELECTOR</a>
+    </div>
+
+    <div class="resume-wrapper" id="resume-container">
+        <div class="header">
+            <h1 class="name">{{ data.full_name }}</h1>
+            <div class="contact-row">
+                <span>[EMAIL: {{ data.email }}]</span>
+                <span>[TEL: {{ data.phone }}]</span>
+                {% if data.linkedin %}<span>[LI: {{ data.linkedin }}]</span>{% endif %}
+                {% if data.github %}<span>[GH: {{ data.github }}]</span>{% endif %}
+            </div>
+        </div>
+
+        {% if data.career_objective %}
+        <div class="section">
+            <div class="section-header">0x01_SUMMARY</div>
+            <p class="item-desc">{{ data.career_objective }}</p>
+        </div>
+        {% endif %}
+
+        {% if data.experience %}
+        <div class="section">
+            <div class="section-header">0x02_EXPERIENCE</div>
+            {% for exp in data.experience %}
+            <div class="item">
+                <div class="item-head">
+                    <span>{{ exp.role }}</span>
+                    <span class="item-dates">{{ exp.start_year }} - {{ exp.end_year or 'PRES' }}</span>
+                </div>
+                <div class="item-subhead">
+                    <span>{{ exp.company }}</span>
+                    {% if exp.location %}<span>{{ exp.location }}</span>{% endif %}
+                </div>
+                <div class="item-desc">{{ exp.description }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-7">
+                {% if data.education %}
+                <div class="section">
+                    <div class="section-header">0x03_EDUCATION</div>
+                    {% for edu in data.education %}
+                    <div class="item">
+                        <div class="item-head">
+                            <span style="font-size: 13px;">{{ edu.school }}</span>
+                        </div>
+                        <div class="item-subhead">
+                            <span style="font-size: 12px;">{{ edu.degree }}</span>
+                            <span class="item-dates">{{ edu.start_year }} - {{ edu.end_year or 'PERS' }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if data.certifications %}
+                <div class="section">
+                    <div class="section-header">0x04_CERTIFICATIONS</div>
+                    <div style="font-family: 'Roboto Mono', monospace; font-size: 11px;">
+                        {% for cert in data.certifications %}
+                        <div style="margin-bottom: 3px;">+ {{ cert }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-5">
+                {% if data.skills %}
+                <div class="section">
+                    <div class="section-header">0x05_TECH_STACK</div>
+                    <div class="skills-grid" style="grid-template-columns: 1fr;">
+                        {% for skill in data.skills %}
+                        <div class="skill-node">{{ skill }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function downloadPDF() {
+            const element = document.getElementById('resume-container');
+            const opt = {
+                margin: 0,
+                filename: 'Tech_Resume_{{ data.full_name|replace(" ", "_") }}.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+</body>
+
+</html>

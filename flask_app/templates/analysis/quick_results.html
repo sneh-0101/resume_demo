@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+
+{% block title %}Analysis Results - AI Resume Analyzer{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Score Card & Chart -->
+    <div class="row mb-4">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 text-center">
+                            <div class="display-3 fw-bold mb-3">
+                                <span class="text-{{ score_color }}">
+                                    {{ score }}%
+                                </span>
+                            </div>
+                            <p class="lead">
+                                <span class="badge bg-{{ score_color }} px-3 py-2">
+                                    {{ score_label }}
+                                </span>
+                            </p>
+
+                            <hr>
+
+                            <div class="mt-4">
+                                <h5 class="text-muted">ATS Score</h5>
+                                <div class="display-6 fw-bold text-info">{{ ats_score }}%</div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <canvas id="analysisChart" style="max-height: 350px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills & ATS Analysis -->
+    <div class="row mb-4">
+        <div class="col-lg-10 mx-auto">
+            <div class="row">
+                <!-- Matched Skills -->
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-check-circle"></i> Matched Skills</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if matched_skills %}
+                            <div class="d-flex flex-wrap gap-2">
+                                {% for skill in matched_skills %}
+                                <span class="badge bg-success">{{ skill }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <p class="text-muted mb-0">No matching skills found.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Missing Skills -->
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-danger text-white">
+                            <h5 class="mb-0"><i class="fas fa-times-circle"></i> Missing Skills</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if missing_skills %}
+                            <div class="d-flex flex-wrap gap-2">
+                                {% for skill in missing_skills %}
+                                <span class="badge bg-danger">{{ skill }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <p class="text-muted mb-0">Great! You have all the required skills.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ATS Friendliness -->
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="fas fa-robot"></i> ATS Friendliness</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if ats_findings %}
+                            <ul class="list-unstyled mb-0">
+                                {% for finding in ats_findings %}
+                                <li class="mb-2">
+                                    <i class="fas fa-exclamation-triangle text-warning"></i> {{ finding }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <p class="text-success mb-0"><i class="fas fa-check-circle"></i> Your resume is highly
+                                ATS-friendly!</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interview Prep & Skill Roadmap -->
+    <div class="row mb-4">
+        <!-- Interactive Interview Prep -->
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-user-graduate"></i> Smart Interview Prep</h5>
+                </div>
+                <div class="card-body">
+                    {% if interview_questions %}
+                    <div class="accordion" id="interviewAccordion">
+                        {% for question in interview_questions %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ loop.index }}">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse{{ loop.index }}" aria-expanded="false"
+                                    aria-controls="collapse{{ loop.index }}">
+                                    Q{{ loop.index }}: {{ question }}
+                                </button>
+                            </h2>
+                            <div id="collapse{{ loop.index }}" class="accordion-collapse collapse"
+                                aria-labelledby="heading{{ loop.index }}" data-bs-parent="#interviewAccordion">
+                                <div class="accordion-body text-muted">
+                                    <em>(Sample answer coming soon... Try answering this yourself!)</em>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted mb-0">No specific interview questions generated.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Skill Gap Roadmap -->
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="fas fa-map-marked-alt"></i> Skill Gap Roadmap</h5>
+                </div>
+                <div class="card-body">
+                    {% if skill_resources %}
+                    <div class="list-group list-group-flush">
+                        {% for resource in skill_resources %}
+                        <a href="{{ resource.url }}" target="_blank"
+                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-0 text-primary">{{ resource.skill.title() }}</h6>
+                                <small class="text-muted">{{ resource.name }}</small>
+                            </div>
+                            <i class="fas fa-external-link-alt text-muted"></i>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted mb-0">No specific resources found. Great job!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suggestions -->
+    <div class="row mb-4">
+        <div class="col-lg-10 mx-auto">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Improvement Suggestions</h5>
+                </div>
+                <div class="card-body">
+                    {% if suggestions %}
+                    <ul class="list-group list-group-flush">
+                        {% for suggestion in suggestions %}
+                        <li class="list-group-item border-0 px-0">
+                            <i class="fas fa-arrow-right text-primary me-2"></i> {{ suggestion }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted mb-0">No specific suggestions at this time.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="row">
+        <div class="col-lg-10 mx-auto text-center">
+            <a href="{{ url_for('analysis.quick_analysis') }}" class="btn btn-primary btn-lg me-2">
+                <i class="fas fa-redo"></i> Run Another Analysis
+            </a>
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-dashboard"></i> Go to Dashboard
+            </a>
+            {% else %}
+            <a href="{{ url_for('auth.register') }}" class="btn btn-success btn-lg">
+                <i class="fas fa-user-plus"></i> Create Account to Save Results
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('analysisChart').getContext('2d');
+
+        const matchPercentage = parseFloat("{{ match_percentage }}") || 0;
+        const matchScore = parseFloat("{{ score }}") || 0;
+        const atsScore = parseFloat("{{ ats_score }}") || 0;
+        const findingsCount = parseInt("{{ ats_findings|length }}") || 0;
+        const formattingScore = findingsCount > 2 ? 70 : 95;
+        const keywordDensity = Math.min(100, matchPercentage * 0.8 + 20);
+
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Skill Match', 'Content Similarity', 'ATS Friendliness', 'Keyword Density', 'Formatting'],
+                datasets: [{
+                    label: 'Match Profile',
+                    data: [matchPercentage, matchScore, atsScore, keywordDensity, formattingScore],
+                    fill: true,
+                    backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                    borderColor: 'rgb(79, 70, 229)',
+                    pointBackgroundColor: 'rgb(79, 70, 229)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(79, 70, 229)'
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    r: {
+                        suggestedMin: 0,
+                        suggestedMax: 100,
+                        ticks: { stepSize: 20 }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
+</div>
+{% endblock %}

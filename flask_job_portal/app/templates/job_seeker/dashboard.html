@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Job Seeker Dashboard{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Stats -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-file text-primary"></i></h5>
+                    <h3>{{ resumes|length }}</h3>
+                    <p>Resumes</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-send text-info"></i></h5>
+                    <h3>{{ total_applications }}</h3>
+                    <p>Applications</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-star text-warning"></i></h5>
+                    <h3>{{ shortlisted }}</h3>
+                    <p>Shortlisted</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-check text-success"></i></h5>
+                    <h3>{{ accepted }}</h3>
+                    <p>Accepted</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Resumes Section -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-file-pdf"></i> My Resumes</h5>
+                    <a href="{{ url_for('job_seeker.upload_resume') }}" class="btn btn-sm btn-light">
+                        <i class="fas fa-plus"></i> Upload
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if resumes %}
+                        <div class="list-group">
+                            {% for resume in resumes %}
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-0">{{ resume.filename }}</h6>
+                                    <small class="text-muted">{{ resume.created_at.strftime('%b %d, %Y') }}</small>
+                                </div>
+                                <div>
+                                    <form method="POST" action="{{ url_for('job_seeker.delete_resume', resume_id=resume.id) }}" style="display: inline;" onclick="return confirm('Delete this resume?');">
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No resumes uploaded. <a href="{{ url_for('job_seeker.upload_resume') }}">Upload one</a> to start applying!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Applications Section -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-send"></i> Recent Applications</h5>
+                    <a href="{{ url_for('job_seeker.my_applications') }}" class="btn btn-sm btn-light">View All</a>
+                </div>
+                <div class="card-body">
+                    {% if applications %}
+                        <div class="list-group">
+                            {% for app in applications[:5] %}
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="mb-1">{{ app.job.title }}</h6>
+                                        <small class="text-muted">{{ app.job.company }} • {{ app.applied_at.strftime('%b %d') }}</small>
+                                    </div>
+                                    <span class="badge bg-{{ 'success' if app.status == 'accepted' else 'warning' if app.status == 'shortlisted' else 'danger' if app.status == 'rejected' else 'secondary' }}">
+                                        {{ app.status.title() }}
+                                    </span>
+                                </div>
+                                {% if app.match_score %}
+                                <small>Match: {{ app.match_score }}%</small>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No applications yet. <a href="{{ url_for('main.browse_jobs') }}">Browse jobs</a> to get started!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h4 class="mb-3">Quick Actions</h4>
+            <div class="btn-group" role="group">
+                <a href="{{ url_for('main.browse_jobs') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-search"></i> Browse Jobs
+                </a>
+                <a href="{{ url_for('job_seeker.upload_resume') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-upload"></i> Upload Resume
+                </a>
+                <a href="{{ url_for('job_seeker.my_applications') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-list"></i> View Applications
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

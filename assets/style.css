@@ -1,0 +1,338 @@
+/* Global Settings */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap');
+
+:root {
+    --primary-color: #4F46E5; /* Indigo 600 */
+    --primary-hover: #4338CA; /* Indigo 700 */
+    --secondary-color: #3B82F6; /* Blue 500 */
+    --background-color: #F9FAFB; /* Gray 50 */
+    --card-bg: #FFFFFF;
+    --text-primary: #111827; /* Gray 900 */
+    --text-secondary: #6B7280; /* Gray 500 */
+    --success-color: #10B981;
+    --warning-color: #F59E0B;
+    --danger-color: #EF4444;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary-color: #6366F1; /* Indigo 500 */
+        --primary-hover: #818CF8; /* Indigo 400 */
+        --secondary-color: #60A5FA; /* Blue 400 */
+        --background-color: #0F172A; /* Dark slate */
+        --card-bg: #1E293B; /* Slate 800 */
+        --text-primary: #F1F5F9; /* Slate 100 */
+        --text-secondary: #94A3B8; /* Slate 400 */
+        --success-color: #34D399;
+        --warning-color: #FBBF24;
+        --danger-color: #F87171;
+    }
+}
+
+/* Base Streamlit Overrides */
+.stApp {
+    background-color: var(--background-color);
+    font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3 {
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-primary);
+}
+
+/* Sidebar Customization */
+section[data-testid="stSidebar"] {
+    background-color: #FFFFFF;
+    border-right: 1px solid #E5E7EB;
+}
+
+/* Custom Card Style */
+.stCard {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    margin-bottom: 20px;
+    border: 1px solid #E5E7EB;
+}
+
+/* Hero Section */
+.hero-section {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%);
+    border-radius: 20px;
+    color: white;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    margin-bottom: 32px;
+}
+
+/* Buttons */
+.stButton>button {
+    width: 100%;
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.secondary-btn>button {
+    background-color: white;
+    color: var(--primary-color);
+    border: 2px solid white;
+}
+
+.secondary-btn>button:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: var(--primary-hover);
+}
+
+
+/* Tags and Chips */
+.skill-tag {
+    display: inline-block;
+    padding: 6px 12px;
+    margin: 4px;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.skill-tag.matched {
+    background-color: #D1FAE5;
+    color: #065F46;
+    border: 1px solid #A7F3D0;
+}
+
+.skill-tag.missing {
+    background-color: #FEE2E2;
+    color: #991B1B;
+    border: 1px solid #FECACA;
+}
+
+/* Metrics */
+.metric-container {
+    text-align: center;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: white;
+    border: 1px solid #E5E7EB;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.metric-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* File Uploader */
+.stFileUploader {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px dashed #E5E7EB;
+}
+
+/* Job Description Text Area */
+.stTextArea textarea {
+    border-radius: 8px;
+    border-color: #D1D5DB;
+    font-family: 'Inter', sans-serif;
+}
+
+.stTextArea textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 1px var(--primary-color);
+}
+/* DARK MODE ENHANCEMENTS */
+
+/* Dark mode - Base Streamlit Overrides */
+@media (prefers-color-scheme: dark) {
+    .stApp {
+        background-color: var(--background-color);
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        color: var(--text-primary);
+    }
+
+    /* Sidebar Dark Mode */
+    section[data-testid="stSidebar"] {
+        background-color: #1E293B;
+        border-right: 1px solid #334155;
+    }
+
+    section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] {
+        color: var(--text-primary);
+    }
+
+    /* Card Dark Mode */
+    .stCard {
+        background-color: var(--card-bg);
+        border: 1px solid #334155;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    }
+
+    .stCard h3 {
+        color: var(--text-primary);
+    }
+
+    .stCard p {
+        color: var(--text-secondary);
+    }
+
+    /* Hero Section Dark Mode */
+    .hero-section {
+        background: linear-gradient(135deg, #4F46E5 0%, #6366F1 50%, #3B82F6 100%);
+        box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
+    }
+
+    /* Button Dark Mode */
+    .stButton > button {
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 0.75rem 1rem;
+        border: none;
+        transition: all 0.2s ease;
+    }
+
+    /* Text Areas Dark Mode */
+    .stTextArea textarea {
+        background-color: #1E293B;
+        color: var(--text-primary);
+        border-color: #334155;
+    }
+
+    .stTextArea textarea::placeholder {
+        color: #64748B;
+    }
+
+    .stTextArea textarea:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    }
+
+    /* File Uploader Dark Mode */
+    .stFileUploader {
+        background-color: #1E293B;
+        border: 2px dashed #334155;
+    }
+
+    /* Metric Container Dark Mode */
+    .metric-container {
+        background-color: var(--card-bg);
+        border: 1px solid #334155;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    .metric-value {
+        color: var(--primary-color);
+    }
+
+    .metric-label {
+        color: var(--text-secondary);
+    }
+
+    /* Skill Tags Dark Mode */
+    .skill-tag {
+        color: var(--text-primary);
+    }
+
+    .skill-tag.matched {
+        background-color: rgba(52, 211, 153, 0.15);
+        color: #86EFAC;
+        border: 1px solid rgba(52, 211, 153, 0.3);
+    }
+
+    .skill-tag.missing {
+        background-color: rgba(248, 113, 113, 0.15);
+        color: #FCA5A5;
+        border: 1px solid rgba(248, 113, 113, 0.3);
+    }
+
+    /* Custom Containers */
+    [data-testid="stContainer"] {
+        background-color: var(--background-color);
+    }
+
+    /* Tabs Dark Mode */
+    [data-testid="stTabs"] [aria-selected="true"] {
+        border-bottom-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+
+    [data-testid="stTabs"] [role="tab"] {
+        color: var(--text-secondary);
+    }
+
+    /* Expander Dark Mode */
+    [data-testid="stExpander"] {
+        border: 1px solid #334155;
+        background-color: var(--card-bg);
+    }
+
+    /* Markdown Text Dark Mode */
+    p, span, li {
+        color: var(--text-primary);
+    }
+
+    /* Input Fields Dark Mode */
+    input, select, textarea {
+        background-color: #1E293B !important;
+        color: var(--text-primary) !important;
+        border-color: #334155 !important;
+    }
+
+    input::placeholder {
+        color: #64748B !important;
+    }
+
+    input:focus, textarea:focus {
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+    }
+
+    /* Select Dropdown Dark Mode */
+    [data-testid="stSelectbox"] {
+        background-color: var(--card-bg);
+    }
+
+    /* Scrollbar Dark Mode */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #0F172A;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #475569;
+    }
+}
